@@ -16,7 +16,6 @@ namespace WebAtividadeEntrevista.Controllers
             return View();
         }
 
-
         public ActionResult Incluir()
         {
             return View();
@@ -26,7 +25,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-            
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -38,22 +37,30 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                
+                string cpf = model.CPF.Replace(".", "").Replace("-", "");
+
+                var mensagensErroCPF = bo.ProcessarValidacaoCPF(cpf);
+
+                if (mensagensErroCPF.Any())
+                {
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, mensagensErroCPF));
+                }
+
                 model.Id = bo.Incluir(new Cliente()
-                {                    
+                {
                     CEP = model.CEP,
                     Cidade = model.Cidade,
                     Email = model.Email,
                     Estado = model.Estado,
                     Logradouro = model.Logradouro,
-                    CPF = model.CPF,
+                    CPF = cpf,
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
 
-           
                 return Json("Cadastro efetuado com sucesso");
             }
         }
@@ -62,7 +69,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
-       
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -74,6 +81,20 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
+                var clienteBase = bo.Consultar(model.Id);
+                string cpf = model.CPF.Replace(".", "").Replace("-", "");
+
+                if (!clienteBase.CPF.Equals(cpf))
+                {
+                    var mensagensErroCPF = bo.ProcessarValidacaoCPF(cpf);
+
+                    if (mensagensErroCPF.Any())
+                    {
+                        Response.StatusCode = 400;
+                        return Json(string.Join(Environment.NewLine, mensagensErroCPF));
+                    }
+                }
+
                 bo.Alterar(new Cliente()
                 {
                     Id = model.Id,
@@ -82,13 +103,13 @@ namespace WebAtividadeEntrevista.Controllers
                     Email = model.Email,
                     Estado = model.Estado,
                     Logradouro = model.Logradouro,
-                    CPF = model.CPF,
+                    CPF = cpf,
                     Nacionalidade = model.Nacionalidade,
                     Nome = model.Nome,
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
-                               
+
                 return Json("Cadastro alterado com sucesso");
             }
         }
@@ -116,8 +137,6 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone
                 };
-
-            
             }
 
             return View(model);

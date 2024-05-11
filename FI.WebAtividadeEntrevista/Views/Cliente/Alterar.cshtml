@@ -9,6 +9,7 @@
         var urlRetorno = '@Url.Action("Index", "Cliente", new { area = "" })';
 </script>
     @Scripts.Render("~/bundles/altClientes")
+    @Scripts.Render("~/bundles/mask")
 }
 <h2>@Html.Raw(ViewBag.Title)</h2>
 @Html.Partial("Forms")

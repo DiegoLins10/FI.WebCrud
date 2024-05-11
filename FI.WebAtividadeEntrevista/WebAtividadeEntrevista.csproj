@@ -391,6 +391,27 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\dist\jquery.mask.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\dist\jquery.mask.min.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\Gruntfile.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\package.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\src\jquery.mask.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\jquery.mask.test.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\qunit.css" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\qunit.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\sinon-1.10.3.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\sinon-qunit-1.0.0.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\sinon-qunit.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-jquery-1.11.1.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-jquery-1.7.2.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-jquery-1.8.3.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-jquery-1.9.1.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-jquery-2.1.1.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-jquery-3.0.0.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\test-for-zepto.html" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\zepto\data.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\zepto\event.js" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\test\zepto\zepto.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -431,6 +452,22 @@
     <Content Include="Scripts\jtable\themes\basic\jtable_basic.less" />
     <Content Include="Views\Cliente\Alterar.cshtml" />
     <Content Include="Views\Cliente\Forms.cshtml" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\.jshintrc" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\.ruby-version" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\.travis.yml" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\bower.json" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\CHANGELOG.md" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\component.json" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\composer.json" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\CONTRIBUTING.md" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\deploy.rb" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\docker-compose.yml" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\Dockerfile" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\ISSUE_TEMPLATE.md" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\LICENSE" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\package-lock.json" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\package.json" />
+    <Content Include="Scripts\Utilities\jQuery-Mask-Plugin\README.md" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FI.AtividadeEntrevista\FI.AtividadeEntrevista.csproj">
