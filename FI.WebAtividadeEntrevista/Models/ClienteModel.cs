@@ -42,6 +42,12 @@ namespace WebAtividadeEntrevista.Models
         /// Logradouro
         /// </summary>
         [Required]
+        public string CPF { get; set; }
+
+        /// <summary>
+        /// Logradouro
+        /// </summary>
+        [Required]
         public string Logradouro { get; set; }
 
         /// <summary>

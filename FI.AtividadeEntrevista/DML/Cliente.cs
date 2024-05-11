@@ -42,6 +42,11 @@ namespace FI.AtividadeEntrevista.DML
         public string Logradouro { get; set; }
 
         /// <summary>
+        /// CPF
+        /// </summary>
+        public string CPF { get; set; }
+
+        /// <summary>
         /// Nacionalidade
         /// </summary>
         public string Nacionalidade { get; set; }
