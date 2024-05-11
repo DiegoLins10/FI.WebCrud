@@ -2,6 +2,7 @@
     @NOME          VARCHAR (50) ,
     @SOBRENOME     VARCHAR (255),
     @NACIONALIDADE VARCHAR (50) ,
+    @CPF		   VARCHAR (11) ,
     @CEP           VARCHAR (9)  ,
     @ESTADO        VARCHAR (2)  ,
     @CIDADE        VARCHAR (50) ,
@@ -19,6 +20,7 @@ BEGIN
 		CEP = @CEP, 
 		ESTADO = @ESTADO, 
 		CIDADE = @CIDADE, 
+		CPF = @CPF, 
 		LOGRADOURO = @LOGRADOURO, 
 		EMAIL = @EMAIL, 
 		TELEFONE = @TELEFONE
