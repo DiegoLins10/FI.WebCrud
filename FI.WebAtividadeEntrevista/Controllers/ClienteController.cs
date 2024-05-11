@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
+using System.Text.RegularExpressions;
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -37,8 +38,10 @@ namespace WebAtividadeEntrevista.Controllers
             }
             else
             {
-                string cpf = model.CPF.Replace(".", "").Replace("-", "");
+                // remove todos os digitos não numericos.
+                string cpf = Regex.Replace(model.CPF, @"[^\d]", "");
 
+                // valida o cpf
                 var mensagensErroCPF = bo.ProcessarValidacaoCPF(cpf);
 
                 if (mensagensErroCPF.Any())
@@ -82,8 +85,11 @@ namespace WebAtividadeEntrevista.Controllers
             else
             {
                 var clienteBase = bo.Consultar(model.Id);
-                string cpf = model.CPF.Replace(".", "").Replace("-", "");
 
+                // remove todos os digitos não numericos.
+                string cpf = Regex.Replace(model.CPF, @"[^\d]", "");
+
+                // valida o cpf, se o CPF atual for igual o da base de dados, não é necessário validar novamente
                 if (!clienteBase.CPF.Equals(cpf))
                 {
                     var mensagensErroCPF = bo.ProcessarValidacaoCPF(cpf);

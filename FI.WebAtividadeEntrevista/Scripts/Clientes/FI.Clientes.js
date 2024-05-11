@@ -1,5 +1,11 @@
 ﻿
 $(document).ready(function () {
+
+    // Adiciona a máscara quando o usuário digitar no campo CPF
+    $('#formCadastro #CPF').on('input', function () {
+        $('#formCadastro #CPF').mask('000.000.000-00', { reverse: true });
+    });
+
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
