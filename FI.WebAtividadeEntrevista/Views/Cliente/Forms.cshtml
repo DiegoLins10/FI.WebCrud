@@ -1,5 +1,4 @@
-﻿
-<form id="formCadastro" method="post">
+﻿<form id="formCadastro" method="post">
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -27,7 +26,6 @@
                 <input required="required" type="text" class="form-control" id="Nacionalidade" name="Nacionalidade" placeholder="Ex.: brasileira" maxlength="50">
             </div>
         </div>
-
     </div>
     <div class="row">
         <div class="col-md-4">
@@ -80,12 +78,146 @@
 
     <div class="row">
         <div class="col-lg-12">
+            <div class="pull-left">
+                <button type="submit" class="btn btn-default" data-toggle="modal" data-target="#myModal">Beneficiários</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
             <div class="pull-right">
                 <button type="submit" class="btn btn-sm btn-success">Salvar</button>
                 @Html.ActionLink("Voltar", "Index", "Cliente", new { }, new { @class = "btn btn-sm btn-danger" })
             </div>
         </div>
     </div>
-
-
 </form>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Conteúdo do modal -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Beneficiários</h4>
+            </div>
+            <div class="modal-body">
+                <!-- Formulário com dois inputs -->
+                <form>
+                    <div class="row">
+                        <div style="margin-left: 10px">
+                            <div class="col-md-4 col-xs-3">
+                                <div class="">
+                                    <label for="CPFBeneficiario">CPF:</label>
+                                    <input required="required" type="text" class="form-control" id="CPFBeneficiario" name="CPFBeneficiario" placeholder="Ex.: 010.011.111-00" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-xs-3">
+                                <div class="">
+                                    <label for="NomeBeneficiario">Nome:</label>
+                                    <input required="required" type="text" class="form-control" id="NomeBeneficiario" name="NomeBeneficiario" placeholder="Ex.: João da silva" maxlength="50">
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-xs-3">
+                                <div class="" style="margin-top: 27px;">
+                                    <button type="button" class="btn btn-sm btn-success" onclick="adicionarBeneficiario()">Incluir</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-10">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>CPF</th>
+                                        <th>Nome</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaBeneficiarios">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <script>
+                        // Variável global para armazenar a lista de beneficiários
+                        var listaBeneficiarios = [];
+
+                        // Contador para gerar IDs únicos para as linhas da tabela
+                        var idCount = 0;
+
+                        function adicionarBeneficiario() {
+                            var cpf = $('#CPFBeneficiario').val();
+                            var nome = $('#NomeBeneficiario').val();
+
+                            // Verifica se os campos estão preenchidos
+                            if (cpf.trim() === '' || nome.trim() === '') {
+                                alert('Por favor, preencha todos os campos.');
+                                return; // Impede a adição do beneficiário se os campos estiverem vazios
+                            } 
+
+                            var beneficiario = listaBeneficiarios.find(d => d.CPF.trim() == cpf.trim());
+
+                            if (beneficiario != null) {
+                                alert('Beneficiario com CPF já cadastrado.');
+                                return; // Impede a adição do beneficiário 
+                            }
+
+                            // Adiciona o beneficiário à lista
+                            listaBeneficiarios.push({ id: idCount++, CPF: cpf, Nome: nome });
+
+                            // Atualiza a tabela de beneficiários
+                            atualizarTabelaBeneficiarios();
+
+                            // Limpa os campos de input após adicionar à lista
+                            $('#CPFBeneficiario').val('');
+                            $('#NomeBeneficiario').val('');
+                        }
+
+                        // Função para atualizar a tabela de beneficiários
+                        function atualizarTabelaBeneficiarios() {
+                            var tabela = $('#tabelaBeneficiarios');
+                            tabela.empty(); // Limpa a tabela antes de adicionar os itens
+
+                            // Adiciona os beneficiários à tabela
+                            listaBeneficiarios.forEach(function (beneficiario) {
+                                tabela.append('<tr id="' + beneficiario.id + '"><td>' + beneficiario.CPF + '</td><td>' + beneficiario.Nome +
+                                    '</td><td> <button type="button" class="btn btn-sm btn-primary" onclick="alterarBeneficiario(' + beneficiario.id + ')">Alterar</button>' +
+                                    '<button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(' + beneficiario.id + ')">Excluir</button></td> </tr>');
+                            });
+                        }
+
+                        // Função para excluir um beneficiário
+                        function excluirBeneficiario(id) {
+                            // Remove o beneficiário da lista com base no ID
+                            listaBeneficiarios = listaBeneficiarios.filter(function (item) {
+                                return item.id !== id;
+                            });
+
+                            // Atualiza a tabela de beneficiários
+                            atualizarTabelaBeneficiarios();
+                        }
+
+                        //Função alterar beneficiario 
+                        function alterarBeneficiario(id) {
+                            // Remove o beneficiário da lista com base no ID
+                            var beneficiario = listaBeneficiarios.find(d => d.id == id);
+
+                            $('#CPFBeneficiario').val(beneficiario.CPF);
+                            $('#NomeBeneficiario').val(beneficiario.Nome)
+
+                            // Atualiza a tabela de beneficiários
+                            atualizarTabelaBeneficiarios();
+                        }
+                    </script>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
