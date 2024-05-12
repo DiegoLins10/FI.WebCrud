@@ -123,9 +123,28 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpGet]
         public ActionResult Alterar(long id)
         {
-            BoCliente bo = new BoCliente();
-            Cliente cliente = bo.Consultar(id);
+            BoCliente bc = new BoCliente();
+            BoBeneficiario bb = new BoBeneficiario();
+            Cliente cliente = bc.Consultar(id);
+            List<Beneficiario> beneficiarios = bb.Consultar(id);
             Models.ClienteModel model = null;
+            List<BeneficiarioModel> BeneficiariosListModel = new List<BeneficiarioModel>();
+
+            if (beneficiarios.Any())
+            {
+                foreach (var item in beneficiarios)
+                {
+                    BeneficiarioModel beneficiarioModel = new BeneficiarioModel()
+                    {
+                        Id = item.Id,
+                        Nome = item.Nome,
+                        CPF = item.CPF,
+                        IdCliente = item.IdCliente
+                    };
+
+                    BeneficiariosListModel.Add(beneficiarioModel);
+                }
+            }
 
             if (cliente != null)
             {
@@ -141,7 +160,8 @@ namespace WebAtividadeEntrevista.Controllers
                     Nacionalidade = cliente.Nacionalidade,
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
-                    Telefone = cliente.Telefone
+                    Telefone = cliente.Telefone,
+                    Beneficiarios = BeneficiariosListModel
                 };
             }
 

@@ -11,8 +11,9 @@ $(document).ready(function () {
         $('#formCadastro #Cidade').val(obj.Cidade);
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
-        $('#formCadastro #CPF').mask('000.000.000-00', { reverse: true });
+        $('#formCadastro #CPF').mask('000.000.000-00', { reverse: true });  
 
+        atualizarTabelaBeneficiarios();
     }
 
     $('#formCadastro').submit(function (e) {

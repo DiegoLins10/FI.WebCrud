@@ -33,16 +33,16 @@ namespace FI.AtividadeEntrevista.DAL
             return ret;
         }
 
-        internal DML.Beneficiario Consultar(long Id)
+        internal List<DML.Beneficiario> Consultar(long IdCliente)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 
-            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", Id));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IdCliente", IdCliente));
 
             DataSet ds = base.Consultar("FI_SP_ConsBeneficiario", parametros);
             List<DML.Beneficiario> cli = Converter(ds);
 
-            return cli.FirstOrDefault();
+            return cli.ToList();
         }
 
         internal bool VerificarExistencia(string CPF)
