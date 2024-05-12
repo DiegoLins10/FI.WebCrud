@@ -1,5 +1,11 @@
 ﻿
 $(document).ready(function () {
+
+    // Adiciona a máscara quando o usuário digitar no campo CPF
+    $('#CPFBeneficiario').on('input', function () {
+        $('#CPFBeneficiario').mask('000.000.000-00', { reverse: true });
+    });
+
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
         $('#formCadastro #CEP').val(obj.CEP);
@@ -12,7 +18,6 @@ $(document).ready(function () {
         $('#formCadastro #Logradouro').val(obj.Logradouro);
         $('#formCadastro #Telefone').val(obj.Telefone);
         $('#formCadastro #CPF').mask('000.000.000-00', { reverse: true });  
-
         atualizarTabelaBeneficiarios();
     }
 

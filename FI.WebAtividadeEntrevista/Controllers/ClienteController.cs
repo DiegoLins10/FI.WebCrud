@@ -1,12 +1,11 @@
 ﻿using FI.AtividadeEntrevista.BLL;
-using WebAtividadeEntrevista.Models;
+using FI.AtividadeEntrevista.DML;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using FI.AtividadeEntrevista.DML;
 using System.Text.RegularExpressions;
+using System.Web.Mvc;
+using WebAtividadeEntrevista.Models;
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -26,6 +25,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Incluir(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
+            BoBeneficiario bb = new BoBeneficiario();
 
             if (!this.ModelState.IsValid)
             {
@@ -64,6 +64,29 @@ namespace WebAtividadeEntrevista.Controllers
                     Telefone = model.Telefone
                 });
 
+                if (model.Beneficiarios != null)
+                {
+                    foreach (var a in model.Beneficiarios)
+                    {
+                        string cpfBeneficiario = Regex.Replace(a.CPF, @"[^\d]", "");
+
+                        var erros = bb.ProcessarValidacaoCPF(cpfBeneficiario, model.Id, a.Novo);
+
+                        if (erros.Any())
+                        {
+                            Response.StatusCode = 400;
+                            return Json($"CPF: {a.CPF} " + string.Join(Environment.NewLine, erros));
+                        }
+
+                        bb.Incluir(new Beneficiario()
+                        {
+                            Nome = a.Nome,
+                            CPF = cpfBeneficiario,
+                            IdCliente = model.Id
+                        });
+                    }
+                }
+
                 return Json("Cadastro efetuado com sucesso");
             }
         }
@@ -72,6 +95,7 @@ namespace WebAtividadeEntrevista.Controllers
         public JsonResult Alterar(ClienteModel model)
         {
             BoCliente bo = new BoCliente();
+            BoBeneficiario bb = new BoBeneficiario();
 
             if (!this.ModelState.IsValid)
             {
@@ -115,6 +139,73 @@ namespace WebAtividadeEntrevista.Controllers
                     Sobrenome = model.Sobrenome,
                     Telefone = model.Telefone
                 });
+
+                var beneficiariosBase = bb.Consultar(model.Id);
+
+                if ((model.Beneficiarios == null))
+                {
+                    if (beneficiariosBase.Any())
+                    {
+                        bb.ExcluirTodos(model.Id);
+                    }
+                }
+                else
+                {
+                    var beneficiariosAtualizar = model.Beneficiarios
+                        .Where(d => !d.Novo);
+
+                    var beneficiariosIncluir = model.Beneficiarios
+                        .Where(d => d.Novo);
+
+                    var beneficiariosExcluir = beneficiariosBase
+                        .Where(d => !beneficiariosAtualizar.Select(x => x.Id).Contains(d.Id));
+
+                    foreach (var e in beneficiariosExcluir)
+                    {
+                        bb.Excluir(e.Id);
+                    }
+
+                    foreach (var a in beneficiariosAtualizar)
+                    {
+                        string cpfBeneficiario = Regex.Replace(a.CPF, @"[^\d]", "");
+
+                        var mensagensErroCPF = bb.ProcessarValidacaoCPF(cpfBeneficiario, model.Id, a.Novo);
+
+                        if (mensagensErroCPF.Any())
+                        {
+                            Response.StatusCode = 400;
+                            return Json($"CPF: {a.CPF} " + string.Join(Environment.NewLine, mensagensErroCPF));
+                        }
+
+                        bb.Alterar(new Beneficiario()
+                        {
+                            Id = a.Id,
+                            Nome = a.Nome,
+                            CPF = cpfBeneficiario,
+                            IdCliente = model.Id
+                        });
+                    }
+
+                    foreach (var i in beneficiariosIncluir)
+                    {
+                        string cpfBeneficiario = Regex.Replace(i.CPF, @"[^\d]", "");
+
+                        var mensagensErroCPF = bb.ProcessarValidacaoCPF(cpfBeneficiario, model.Id, i.Novo);
+
+                        if (mensagensErroCPF.Any())
+                        {
+                            Response.StatusCode = 400;
+                            return Json($"CPF: {i.CPF} " + string.Join(Environment.NewLine, mensagensErroCPF));
+                        }
+
+                        bb.Incluir(new Beneficiario()
+                        {
+                            Nome = i.Nome,
+                            CPF = cpfBeneficiario,
+                            IdCliente = model.Id
+                        });
+                    }
+                }
 
                 return Json("Cadastro alterado com sucesso");
             }

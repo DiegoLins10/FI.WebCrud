@@ -122,11 +122,11 @@ namespace FI.AtividadeEntrevista.BLL
 
             if (!CpfValido(cpf))
             {
-                erros.Add("CPF Invalido!");
+                erros.Add("CPF Invalido para o cliente!");
             }
             if (VerificarExistencia(cpf))
             {
-                erros.Add("CPF já cadastrado!");
+                erros.Add("CPF já cadastrado para outro cliente!");
             }
 
             return erros;

@@ -45,11 +45,12 @@ namespace FI.AtividadeEntrevista.DAL
             return cli.ToList();
         }
 
-        internal bool VerificarExistencia(string CPF)
+        internal bool VerificarExistencia(string CPF, long IdCliente)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
 
             parametros.Add(new System.Data.SqlClient.SqlParameter("CPF", CPF));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", IdCliente));
 
             DataSet ds = base.Consultar("FI_SP_VerificaBeneficiario", parametros);
 
@@ -121,6 +122,15 @@ namespace FI.AtividadeEntrevista.DAL
             parametros.Add(new System.Data.SqlClient.SqlParameter("Id", Id));
 
             base.Executar("FI_SP_DelBeneficiario", parametros);
+        }
+
+        internal void ExcluirTodos(long IdCliente)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+
+            parametros.Add(new System.Data.SqlClient.SqlParameter("IDCLIENTE", IdCliente));
+
+            base.Executar("FI_SP_DelTodosBeneficiario", parametros);
         }
 
         private List<DML.Beneficiario> Converter(DataSet ds)

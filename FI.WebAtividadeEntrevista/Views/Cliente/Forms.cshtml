@@ -123,7 +123,8 @@
                             </div>
                             <div class="col-md-4 col-xs-3">
                                 <div class="" style="margin-top: 27px;">
-                                    <button type="button" class="btn btn-sm btn-success" onclick="adicionarBeneficiario()">Incluir</button>
+                                    <button type="button" class="btn btn-sm btn-success" id="adicionarB" onclick="adicionarBeneficiario()">Incluir</button>
+                                    <button type="button" class="btn btn-sm btn-success" id="atualizarB" onclick="AtualizarBeneficiario()">Atualizar</button>
                                 </div>
                             </div>
                         </div>
@@ -145,7 +146,8 @@
                     <script>
 
                         // Contador para gerar IDs únicos para as linhas da tabela
-                        var idCount = 0;
+                        var idCount = 0; 
+                        var idBeneficiario = 0;
 
                         function adicionarBeneficiario() {
                             var cpf = $('#CPFBeneficiario').val();
@@ -155,17 +157,28 @@
                             if (cpf.trim() === '' || nome.trim() === '') {
                                 alert('Por favor, preencha todos os campos.');
                                 return; // Impede a adição do beneficiário se os campos estiverem vazios
-                            } 
+                            }
+
+                            if (cpf.trim().length != 14) {
+                                alert('cpf deve ter 11 digitos');
+                                return; 
+                            }
 
                             var beneficiario = listaBeneficiarios.find(d => d.CPF.trim() == cpf.trim());
 
                             if (beneficiario != null) {
                                 alert('Beneficiario com CPF já cadastrado.');
-                                return; // Impede a adição do beneficiário 
+                                return; // Impede a adição do beneficiário
                             }
 
+                            idCount = getMaxId(listaBeneficiarios) + 1;
+
+                            console.log(idCount);
+
                             // Adiciona o beneficiário à lista
-                            listaBeneficiarios.push({ id: idCount++, CPF: cpf, Nome: nome });
+                            listaBeneficiarios.push({ Id: idCount, CPF: cpf, Nome: nome, Novo: true });
+
+                            console.log(listaBeneficiarios);
 
                             // Atualiza a tabela de beneficiários
                             atualizarTabelaBeneficiarios();
@@ -178,13 +191,16 @@
                         // Função para atualizar a tabela de beneficiários
                         function atualizarTabelaBeneficiarios() {
                             var tabela = $('#tabelaBeneficiarios');
+                            $('#atualizarB').hide();
                             tabela.empty(); // Limpa a tabela antes de adicionar os itens
 
                             // Adiciona os beneficiários à tabela
                             listaBeneficiarios.forEach(function (beneficiario) {
-                                tabela.append('<tr id="' + beneficiario.id + '"><td>' + beneficiario.CPF + '</td><td>' + beneficiario.Nome +
-                                    '</td><td> <button type="button" class="btn btn-sm btn-primary" onclick="alterarBeneficiario(' + beneficiario.id + ')">Alterar</button>' +
-                                    '<button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(' + beneficiario.id + ')">Excluir</button></td> </tr>');
+
+                                beneficiario.CPF = beneficiario.CPF.replace(/\D/g, '').replace(/^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');;
+                                tabela.append('<tr id="' + beneficiario.Id + '"><td>' + beneficiario.CPF + '</td><td>' + beneficiario.Nome +
+                                    '</td><td> <button type="button" class="btn btn-sm btn-primary" onclick="alterarBeneficiario(' + beneficiario.Id + ')">Alterar</button>' +
+                                    '<button type="button" class="btn btn-sm btn-danger" onclick="excluirBeneficiario(' + beneficiario.Id + ')">Excluir</button></td> </tr>');
                             });
                         }
 
@@ -192,23 +208,67 @@
                         function excluirBeneficiario(id) {
                             // Remove o beneficiário da lista com base no ID
                             listaBeneficiarios = listaBeneficiarios.filter(function (item) {
-                                return item.id !== id;
+                                return item.Id !== id;
                             });
 
+                            console.log(listaBeneficiarios);
                             // Atualiza a tabela de beneficiários
                             atualizarTabelaBeneficiarios();
                         }
 
-                        //Função alterar beneficiario 
+                        //Função alterar beneficiario
                         function alterarBeneficiario(id) {
-                            // Remove o beneficiário da lista com base no ID
-                            var beneficiario = listaBeneficiarios.find(d => d.id == id);
+
+                            var beneficiario = listaBeneficiarios.find(d => d.Id == id);
+                            idBeneficiario = id;
+
+                            $('#adicionarB').hide();
+                            $('#atualizarB').show();
 
                             $('#CPFBeneficiario').val(beneficiario.CPF);
                             $('#NomeBeneficiario').val(beneficiario.Nome)
+                            $('#CPFBeneficiario').mask('000.000.000-00', { reverse: true });
+
+                        }
+
+                        function AtualizarBeneficiario() {
+
+                            var cpf = $('#CPFBeneficiario').val();
+                            var nome = $('#NomeBeneficiario').val();
+
+
+                            var b = listaBeneficiarios.find(d => d.Id == idBeneficiario);
+                            b.Nome = nome;
+                            b.CPF = cpf;
+
+                            console.log(b);
+
+                            $('#adicionarB').show();
+                            $('#atualizarB').hide();
 
                             // Atualiza a tabela de beneficiários
                             atualizarTabelaBeneficiarios();
+
+                            // Limpa os campos de input após adicionar à lista
+                            $('#CPFBeneficiario').val('');
+                            $('#NomeBeneficiario').val('');
+
+                        }
+
+                        function getMaxId(array) {
+                            if (array.length === 0) {
+                                return 1; // Retorna null se o array estiver vazio
+                            }
+
+                            let maxId = array[0].Id; // Inicializa o máximo como o id do primeiro objeto
+
+                            for (let i = 1; i < array.length; i++) {
+                                if (array[i].Id > maxId) {
+                                    maxId = array[i].Id; // Atualiza o máximo se encontrarmos um ID maior
+                                }
+                            }
+
+                            return maxId;
                         }
                     </script>
                 </form>

@@ -50,6 +50,12 @@ namespace FI.AtividadeEntrevista.BLL
             cli.Excluir(id);
         }
 
+        public void ExcluirTodos(long idCliente)
+        {
+            DAL.DaoBeneficiario cli = new DAL.DaoBeneficiario();
+            cli.ExcluirTodos(idCliente);
+        }
+
         /// <summary>
         /// Lista os beneficiarios
         /// </summary>
@@ -73,10 +79,10 @@ namespace FI.AtividadeEntrevista.BLL
         /// </summary>
         /// <param name="CPF"></param>
         /// <returns></returns>
-        public bool VerificarExistencia(string CPF)
+        public bool VerificarExistencia(string CPF, long idcliente)
         {
             DAL.DaoBeneficiario cli = new DAL.DaoBeneficiario();
-            return cli.VerificarExistencia(CPF);
+            return cli.VerificarExistencia(CPF, idcliente);
         }
 
         public bool CpfValido(string CPF)
@@ -115,7 +121,7 @@ namespace FI.AtividadeEntrevista.BLL
             return resto < 2 ? 0 : 11 - resto;
         }
 
-        public List<string> ProcessarValidacaoCPF(string cpf)
+        public List<string> ProcessarValidacaoCPF(string cpf, long idcliente, bool incluir)
         {
             List<string> erros = new List<string>();
 
@@ -123,13 +129,15 @@ namespace FI.AtividadeEntrevista.BLL
             {
                 erros.Add("CPF Invalido!");
             }
-            if (VerificarExistencia(cpf))
+            if (incluir)
             {
-                erros.Add("CPF já cadastrado!");
+                if (VerificarExistencia(cpf, idcliente))
+                {
+                    erros.Add("CPF já cadastrado!");
+                }
             }
 
             return erros;
         }
-
     }
 }

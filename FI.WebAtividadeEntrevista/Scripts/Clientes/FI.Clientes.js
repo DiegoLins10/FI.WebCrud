@@ -6,6 +6,10 @@ $(document).ready(function () {
         $('#formCadastro #CPF').mask('000.000.000-00', { reverse: true });
     });
 
+    $('#CPFBeneficiario').on('input', function () {
+        $('#CPFBeneficiario').mask('000.000.000-00', { reverse: true });
+    });
+
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -21,7 +25,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "beneficiarios": listaBeneficiarios
             },
             error:
             function (r) {
